@@ -11,6 +11,7 @@ import Firebase
 class RegistrationController: UIViewController {
     
     // MARK: - Properties
+    
     private let imagePicker = UIImagePickerController()
     private var profileImage: UIImage?
     
@@ -86,12 +87,14 @@ class RegistrationController: UIViewController {
     }()
     
     // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
     }
     
     // MARK: - Selector
+    
     @objc func handleAddProfilePhoto() {
         present(imagePicker, animated: true, completion: nil)
     }
@@ -125,6 +128,7 @@ class RegistrationController: UIViewController {
     }
     
     // MARK: - Helpers
+    
     func configureUI() {
         view.backgroundColor = .twitterBlue
         
@@ -157,6 +161,7 @@ class RegistrationController: UIViewController {
 }
 
 // MARK: - UIImagePickerControllerDelegate
+
 extension RegistrationController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let profileImage = info[.editedImage] as? UIImage else {return}

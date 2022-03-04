@@ -10,6 +10,7 @@ import UIKit
 class LoginController: UIViewController {
     
     // MARK: - Properties
+    
     private let logoImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
@@ -60,12 +61,14 @@ class LoginController: UIViewController {
     }()
     
     // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
     }
     
     // MARK: - Selector
+    
     @objc func handleShowSignUp() {
         let controller = RegistrationController()
         navigationController?.pushViewController(controller, animated: true)
@@ -89,6 +92,7 @@ class LoginController: UIViewController {
     }
     
     // MARK: - Helpers
+    
     func configureUI() {
         view.backgroundColor = .twitterBlue
         navigationController?.navigationBar.barStyle = .black
