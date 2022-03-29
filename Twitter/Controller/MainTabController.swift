@@ -40,8 +40,10 @@ class MainTabController: UITabBarController {
     }
     
     // MARK: - API
+    
     func fetchUser() {
-        UserService.shared.fetchUser { user in
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        UserService.shared.fetchUser(uid: uid) { user in
             self.user = user
         }
     }
@@ -72,7 +74,11 @@ class MainTabController: UITabBarController {
     // MARK: - Selectors
     
     @objc func actionButtonTapped() {
-        print(123)
+        guard let user = user else {return}
+        let controller = UploadTweetController(user: user)
+        let nav = UINavigationController(rootViewController: controller)
+        nav.modalPresentationStyle = .overFullScreen
+        self.present(nav, animated: true, completion: nil)
     }
     
     // MARK: - Helpers
@@ -80,8 +86,13 @@ class MainTabController: UITabBarController {
     func configureUI() {
         view.addSubview(actionButton)
         
-        actionButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor,
-                            paddingBottom: 64, paddingRight: 16, width: 56, height: 56)
+        actionButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                            right: view.rightAnchor,
+                            paddingBottom: 64,
+                            paddingRight: 16,
+                            width: 56,
+                            height: 56)
+        
         actionButton.layer.cornerRadius = 56/2
         
 //        actionButton.translatesAutoresizingMaskIntoConstraints = false
@@ -96,7 +107,7 @@ class MainTabController: UITabBarController {
     func configureViewControllers() {
         view.backgroundColor = .blue
 
-            let feed = FeedController()
+            let feed = FeedController(collectionViewLayout: UICollectionViewFlowLayout())
             let nav1 = templateNavigationController(image: UIImage(named: "home_unselected"), rootViewController: feed)
 
             let explore = ExploreController()
@@ -117,5 +128,4 @@ class MainTabController: UITabBarController {
             nav.navigationBar.barTintColor = .white
             return nav
         }
-
 }

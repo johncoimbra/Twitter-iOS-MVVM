@@ -45,7 +45,7 @@ struct AuthService {
                     }
                     
                     guard let uid = result?.user.uid else {return}
-                    
+        
                     let values = ["email": email,
                                   "username": userName,
                                   "fullname": fullName,
