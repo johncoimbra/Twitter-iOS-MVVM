@@ -40,6 +40,7 @@ class MainTabController: UITabBarController {
     }
     
     // MARK: - API
+    
     func fetchUser() {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         UserService.shared.fetchUser(uid: uid) { user in
@@ -85,8 +86,13 @@ class MainTabController: UITabBarController {
     func configureUI() {
         view.addSubview(actionButton)
         
-        actionButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor,
-                            paddingBottom: 64, paddingRight: 16, width: 56, height: 56)
+        actionButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                            right: view.rightAnchor,
+                            paddingBottom: 64,
+                            paddingRight: 16,
+                            width: 56,
+                            height: 56)
+        
         actionButton.layer.cornerRadius = 56/2
         
 //        actionButton.translatesAutoresizingMaskIntoConstraints = false
@@ -122,5 +128,4 @@ class MainTabController: UITabBarController {
             nav.navigationBar.barTintColor = .white
             return nav
         }
-
 }

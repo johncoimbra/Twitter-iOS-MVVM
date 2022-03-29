@@ -7,15 +7,21 @@
 
 import UIKit
 
+protocol TweetCellDelegate: AnyObject {
+    func handleProfileImageTapped(_ cell: TweetCell)
+}
+
 class TweetCell: UICollectionViewCell {
     
     // MARK: - Properties
     
     var tweet: Tweet? {
-        didSet {configure()}
+        didSet { configure() }
     }
     
-    private let profileImageView: UIImageView = {
+    weak var delegate: TweetCellDelegate?
+    
+    private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleToFill
         iv.clipsToBounds = true
@@ -23,8 +29,14 @@ class TweetCell: UICollectionViewCell {
         iv.layer.cornerRadius = 48/2
         iv.layer.masksToBounds = true
         iv.backgroundColor = .twitterBlue
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleProfileImageTapped))
+        iv.addGestureRecognizer(tap)
+        iv.isUserInteractionEnabled = true
+        
         return iv
     }()
+    
     
     private let captionLabel: UILabel = {
         let label = UILabel()
@@ -80,34 +92,45 @@ class TweetCell: UICollectionViewCell {
         backgroundColor = .white
         
         addSubview(profileImageView)
-        profileImageView.anchor(top: topAnchor, left: leftAnchor,
-                                paddingTop: 8, paddingLeft: 8)
+        profileImageView.anchor(top: topAnchor,
+                                left: leftAnchor,
+                                paddingTop: 8,
+                                paddingLeft: 8)
         
-        let stack = UIStackView(arrangedSubviews: [infoLabel, captionLabel])
+        let stack = UIStackView(arrangedSubviews: [infoLabel,
+                                                   captionLabel])
         stack.axis = .vertical
         stack.distribution = .fillProportionally
         stack.spacing = 4
         
         addSubview(stack)
-        stack.anchor(top: profileImageView.topAnchor, left: profileImageView.rightAnchor,
-                     right: rightAnchor, paddingLeft: 12, paddingRight: 12)
+        stack.anchor(top: profileImageView.topAnchor,
+                     left: profileImageView.rightAnchor,
+                     right: rightAnchor,
+                     paddingLeft: 12,
+                     paddingRight: 12)
         
         infoLabel.font = UIFont.systemFont(ofSize: 14)
         infoLabel.text = "John Coimbra @johncoimbra"
         
-        let actionStack = UIStackView(arrangedSubviews: [commentButton, retweetButton,
-                                                         likeButton, sharedButton])
+        let actionStack = UIStackView(arrangedSubviews: [commentButton,
+                                                         retweetButton,
+                                                         likeButton,
+                                                         sharedButton])
         actionStack.axis = .horizontal
         actionStack.spacing = 72
         addSubview(actionStack)
         actionStack.centerX(inView: self)
-        actionStack.anchor(bottom: bottomAnchor, paddingBottom: 8)
+        actionStack.anchor(bottom: bottomAnchor,
+                           paddingBottom: 8)
         
         let underlineView = UIView()
         underlineView.backgroundColor = .systemGroupedBackground
         addSubview(underlineView)
-        underlineView.anchor(left: leftAnchor, bottom: bottomAnchor,
-                             right: rightAnchor, height: 1)
+        underlineView.anchor(left: leftAnchor,
+                             bottom: bottomAnchor,
+                             right: rightAnchor,
+                             height: 1)
     }
     
     required init?(coder: NSCoder) {
@@ -115,6 +138,10 @@ class TweetCell: UICollectionViewCell {
     }
     
     // MARK: Selector
+    
+    @objc func handleProfileImageTapped() {
+        delegate?.handleProfileImageTapped(self)
+    }
     
     @objc func handleCommentTapped() {
         
